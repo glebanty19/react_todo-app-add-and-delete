@@ -135,19 +135,29 @@ export const App: React.FC = () => {
     try {
       let hasError = false;
 
-      for (const todo of completedTodos) {
+      const deletePromises = completedTodos.map(async todo => {
         try {
           await deleteTodos(todo.id);
-          setTodos(prevTodos => prevTodos.filter(t => t.id !== todo.id));
+
+          return todo.id;
         } catch (e) {
           hasError = true;
+
+          return null;
         }
-      }
+      });
+
+      const results = await Promise.all(deletePromises);
+
+      const deletedIds = results.filter(id => id !== null) as number[];
+
+      setTodos(prevTodos =>
+        prevTodos.filter(todo => !deletedIds.includes(todo.id)),
+      );
 
       if (hasError) {
         setError('Unable to delete a todo');
       }
-    } catch (e) {
     } finally {
       setDeletingTodoIds(prev =>
         prev.filter(id => !completedTodos.find(todo => todo.id === id)),
