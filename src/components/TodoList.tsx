@@ -2,6 +2,7 @@ import React from 'react';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
 import { FilterStatus } from '../types/FilterStatus';
+import cn from 'classnames';
 
 type Props = {
   todos: Todo[];
@@ -38,8 +39,11 @@ export const TodoList: React.FC<Props> = ({
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {isLoading && !todos.length ? (
-        <div className="modal overlay is-active">
+      {!todos.length ? (
+        <div
+          data-cy="TodoLoader"
+          className={cn('modal overlay', { 'is-active': isLoading })}
+        >
           <div className="modal-background has-background-white-ter" />
           <div className="loader" />
         </div>

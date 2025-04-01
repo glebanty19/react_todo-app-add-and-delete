@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import { Todo } from '../types/Todo';
+import cn from 'classnames';
 
 type Props = {
   todo: Todo;
@@ -45,12 +46,15 @@ export const TodoItem: React.FC<Props> = ({
         ×
       </button>
 
-      {(isDeleting || isLoading) && (
-        <div data-cy="TodoLoader" className="modal overlay is-active">
-          <div className="modal-background has-background-white-ter" />
-          <div className="loader" />
-        </div>
-      )}
+      <div
+        data-cy="TodoLoader"
+        className={cn('modal overlay', {
+          'is-active': isDeleting || isLoading,
+        })}
+      >
+        <div className="modal-background has-background-white-ter" />
+        <div className="loader" />
+      </div>
     </div>
   );
 };
